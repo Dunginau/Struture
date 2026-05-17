@@ -67,6 +67,9 @@ function updatePanel() {
         badge.textContent = '—';
     }
 
+    // ── Display options (always visible) ─────────────────────
+    body.appendChild(buildDisplaySection());
+
     // ── Solve button always visible ───────────────────────────
     const solveBtn = document.createElement('button');
     solveBtn.className   = 'solve-panel-btn';
@@ -84,6 +87,61 @@ function updatePanel() {
     } else if (tool !== 'addForce') {
         body.appendChild(emptyState('◈', 'Build your truss,\nadd forces, then\nclick Solve.'));
     }
+}
+
+// ── Display Options Section ───────────────────────────────────
+
+function buildDisplaySection() {
+    const section = div('panel-section');
+    section.appendChild(el('span', 'section-label', 'Display'));
+
+    const rows = div('');
+
+    // ── Show angles toggle ────────────────────────────────────
+    rows.appendChild(toggleRow(
+        'Member angles',
+        state.showAngles,
+        (val) => {
+            state.set({ showAngles: val });
+            if (trussRef) render(trussRef);
+        }
+    ));
+
+    // ── Show lengths toggle ───────────────────────────────────
+    rows.appendChild(toggleRow(
+        'Member lengths',
+        state.showLengths,
+        (val) => {
+            state.set({ showLengths: val });
+            if (trussRef) render(trussRef);
+        }
+    ));
+
+    // ── Snap to grid toggle ───────────────────────────────────
+    rows.appendChild(toggleRow(
+        'Snap to grid',
+        state.snapToGrid,
+        (val) => { state.set({ snapToGrid: val }); }
+    ));
+
+    section.appendChild(rows);
+    return section;
+}
+
+function toggleRow(label, checked, onChange) {
+    const row = div('toggle-row');
+    row.appendChild(el('span', 'toggle-label', label));
+
+    const wrapper = div('toggle-switch');
+    const input   = document.createElement('input');
+    input.type    = 'checkbox';
+    input.checked = checked;
+    input.addEventListener('change', () => onChange(input.checked));
+
+    const track = div('toggle-track');
+    wrapper.append(input, track);
+    row.appendChild(wrapper);
+    return row;
 }
 
 // ── Support Form ──────────────────────────────────────────────

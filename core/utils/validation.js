@@ -55,7 +55,7 @@ export function validateTruss(truss) {
     if (totalReactions < 3) {
         return fail(
             `Only ${totalReactions} reaction component(s) — need exactly 3 to be determinate. ` +
-            'Try: one pin + one roller, or two rollers + one pin.'
+            'Try: one pin + one roller'
         );
     }
     if (totalReactions > 3) {
