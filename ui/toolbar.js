@@ -7,6 +7,7 @@
 
 import state from './state.js';
 import { render } from '../renderer/canvas.js';
+import { downloadTruss } from '../core/utils/serialization.js';
 
 const TOOLS = [
     { id: 'select',     label: '↖',  title: 'Select'       },
@@ -60,6 +61,15 @@ export function initToolbar(truss) {
     solveBtn.className  = 'tool-btn solve-btn';
     solveBtn.addEventListener('click', () => window.onSolve?.());
     toolbar.appendChild(solveBtn);
+
+    // ── Save ──────────────────────────────────────────────────
+    const saveBtn = document.createElement('button');
+    saveBtn.innerHTML  = '💾';
+    saveBtn.title      = 'Save to File';
+    saveBtn.className  = 'tool-btn';
+    saveBtn.style.color = 'var(--accent)';
+    saveBtn.addEventListener('click', () => downloadTruss(truss));
+    toolbar.appendChild(saveBtn);
 
     // ── Divider ───────────────────────────────────────────────
     const div2 = document.createElement('div');

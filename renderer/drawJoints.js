@@ -58,7 +58,7 @@ export function drawJoints(ctx, truss, worldToScreen) {
  *   - Dashed reach circles (200 world units) around all existing joints
  *   - A ghost dot at the candidate position
  *   - A snap indicator if snapping is active
- *   - Red tint if outside all reach circles (when joints already exist)
+ *   - Red tint if outside all reach circles (visual warning only, placement allowed)
  */
 export function drawGhost(ctx, ghost, truss, worldToScreen) {
     const { x, y, withinReach, snapped } = ghost;
@@ -78,7 +78,8 @@ export function drawGhost(ctx, ghost, truss, worldToScreen) {
 
             ctx.beginPath();
             ctx.arc(sj.x, sj.y, reachPx, 0, Math.PI * 2);
-            ctx.strokeStyle = withinReach ? '#3ecf8e22' : '#e0506022';
+            // Increased opacity for red warning (44 instead of 22)
+            ctx.strokeStyle = withinReach ? '#3ecf8e22' : '#e0506044';
             ctx.stroke();
         }
 

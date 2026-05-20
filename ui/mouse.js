@@ -3,10 +3,9 @@
  *
  * addJoint tool:
  *   - Ghost previews the resolved position on every mousemove.
- *   - resolvePosition always clamps to the nearest joint's MAX_REACH circle
- *     when cursor is outside it, so placement is always within reach.
- *   - Grid snap (minor grid) is applied AFTER reach clamping.
- *   - First joint (no existing joints) has no reach constraint.
+ *   - resolvePosition allows free placement (no clamping to MAX_REACH).
+ *   - Grid snap (minor grid) is applied to the resolved position.
+ *   - withinReach indicates if the ghost is within MAX_REACH of an existing joint.
  */
 
 import state from './state.js';
@@ -103,13 +102,20 @@ function handleClick(wx, wy, truss) {
 
 function updateGhost(wx, wy) {
     const pos = resolvePosition(wx, wy);
+    
+    let withinReach = true;
+    if (trussRef.joints.length > 0) {
+        const nearest = nearestJoint(pos.x, pos.y);
+        const dist    = Math.hypot(pos.x - nearest.x, pos.y - nearest.y);
+        withinReach = dist <= MAX_REACH;
+    }
+
     state.set({
         ghostJoint: {
             x:       pos.x,
             y:       pos.y,
             snapped: state.snapToGrid,
-            // Always within reach after clamping — colour stays green
-            withinReach: true,
+            withinReach: withinReach,
         }
     });
 }
@@ -120,24 +126,11 @@ function updateGhost(wx, wy) {
  * Final world position for joint placement.
  *
  * Steps:
- *   1. If existing joints, clamp raw cursor to the nearest joint's MAX_REACH circle.
- *   2. If snap-to-grid, snap the (possibly clamped) position to minorGrid.
+ *   1. If snap-to-grid, snap the position to minorGrid.
  */
 function resolvePosition(wx, wy) {
     let x = wx;
     let y = wy;
-
-    if (trussRef.joints.length > 0) {
-        const nearest = nearestJoint(wx, wy);
-        const dist    = Math.hypot(wx - nearest.x, wy - nearest.y);
-
-        if (dist > MAX_REACH) {
-            // Project onto the reach circle of the nearest joint
-            const angle = Math.atan2(wy - nearest.y, wx - nearest.x);
-            x = nearest.x + MAX_REACH * Math.cos(angle);
-            y = nearest.y + MAX_REACH * Math.sin(angle);
-        }
-    }
 
     if (state.snapToGrid) {
         const g = state.minorGrid;
