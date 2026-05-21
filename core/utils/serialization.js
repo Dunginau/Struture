@@ -82,3 +82,41 @@ export function downloadTruss(truss) {
 
     URL.revokeObjectURL(url);
 }
+
+/**
+ * Reconstructs a truss from a JSON string.
+ *
+ * @param {import('../entities/Truss.js').default} truss
+ * @param {string} jsonString
+ */
+export function deserializeTruss(truss, jsonString) {
+    const data = JSON.parse(jsonString);
+
+    // Start with a clean slate
+    truss.clear();
+
+    // Map old IDs from JSON -> new IDs in the live Truss object
+    const idMap = new Map();
+
+    // 1. Reconstruct Joints
+    if (Array.isArray(data.joints)) {
+        for (const j of data.joints) {
+            const newJoint = truss.addJoint(j.x, j.y, j.support);
+            idMap.set(j.id, newJoint.id);
+        }
+    }
+
+    // 2. Reconstruct Members
+    if (Array.isArray(data.members)) {
+        for (const m of data.members) {
+            const jAId = idMap.get(m.jointA);
+            const jBId = idMap.get(m.jointB);
+
+            if (jAId !== undefined && jBId !== undefined) {
+                truss.addMember(jAId, jBId);
+            }
+        }
+    }
+
+    // 3. Forces are explicitly ignored per requirements to "keep all forces value empty"
+}
