@@ -133,7 +133,7 @@ function resolvePosition(wx, wy) {
     let y = wy;
 
     if (state.snapToGrid) {
-        const g = state.minorGrid/20;
+        const g = state.minorGrid/10;
         x = Math.round(x / g) * g;
         y = Math.round(y / g) * g;
     }
