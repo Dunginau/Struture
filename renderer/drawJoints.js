@@ -42,10 +42,10 @@ export function drawJoints(ctx, truss, worldToScreen) {
 
         // Label
         ctx.font         = '10px monospace';
-        ctx.fillStyle    = selected ? '#4d7cfe' : '#454d68';
+        ctx.fillStyle    = selected ? '#4d7cfe' : '#bfc5d6';
         ctx.textAlign    = 'left';
         ctx.textBaseline = 'bottom';
-        ctx.fillText(`J${joint.id}`, x + JOINT_RADIUS + 3, y - 2);
+        ctx.fillText(`${joint.label}`, x + JOINT_RADIUS + 3, y - 2);
 
         ctx.restore();
     }

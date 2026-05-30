@@ -1,6 +1,7 @@
 import Joint  from './Joint.js';
 import Member from './Member.js';
 import Force  from './Force.js';
+import { getAlphabetLabel } from '../utils/labeling.js';
 
 /**
  * Truss — top-level container for the entire model.
@@ -29,7 +30,8 @@ export default class Truss {
      * @returns {Joint}
      */
     addJoint(x, y, support = null) {
-        const joint = new Joint(this._nextJointId++, x, y, support);
+        const label = getAlphabetLabel(this._nextJointId);
+        const joint = new Joint(this._nextJointId++, label, x, y, support);
         this.joints.push(joint);
         return joint;
     }
@@ -44,6 +46,11 @@ export default class Truss {
         this.joints   = this.joints.filter(j => j.id !== id);
         this.members  = this.members.filter(m => m.jointA !== id && m.jointB !== id);
         this.forces   = this.forces.filter(f => f.jointId !== id);
+        
+        // When a joint is removed, we might want to keep IDs stable but labels might change if we re-index.
+        // However, the current logic increments _nextJointId. 
+        // If we want "A, B, C" to always be sequential, we'd need to re-label all joints.
+        // For now, let's keep the assigned label for the life of the joint to avoid confusion.
     }
 
     // ── Members ──────────────────────────────────────────────
@@ -54,7 +61,11 @@ export default class Truss {
      * @returns {Member}
      */
     addMember(jointAId, jointBId) {
-        const member = new Member(this._nextMemberId++, jointAId, jointBId);
+        const jA = this.getJoint(jointAId);
+        const jB = this.getJoint(jointBId);
+        const label = (jA && jB) ? `${jA.label}${jB.label}` : `M${this._nextMemberId}`;
+
+        const member = new Member(this._nextMemberId++, label, jointAId, jointBId);
         this.members.push(member);
         return member;
     }

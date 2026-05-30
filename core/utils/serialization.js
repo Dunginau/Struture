@@ -17,6 +17,7 @@ export function serializeTruss(truss) {
         timestamp: new Date().toISOString(),
         joints: truss.joints.map(j => ({
             id: j.id,
+            label: j.label,
             x: j.x,
             y: j.y,
             support: j.support,
@@ -41,6 +42,7 @@ export function serializeTruss(truss) {
 
             return {
                 id: m.id,
+                label: m.label,
                 jointA: m.jointA,
                 jointB: m.jointB,
                 length: parseFloat(len.toFixed(4)),
@@ -102,6 +104,7 @@ export function deserializeTruss(truss, jsonString) {
     if (Array.isArray(data.joints)) {
         for (const j of data.joints) {
             const newJoint = truss.addJoint(j.x, j.y, j.support);
+            if (j.label) newJoint.label = j.label;
             idMap.set(j.id, newJoint.id);
         }
     }
@@ -113,7 +116,8 @@ export function deserializeTruss(truss, jsonString) {
             const jBId = idMap.get(m.jointB);
 
             if (jAId !== undefined && jBId !== undefined) {
-                truss.addMember(jAId, jBId);
+                const newMember = truss.addMember(jAId, jBId);
+                if (m.label) newMember.label = m.label;
             }
         }
     }

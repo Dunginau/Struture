@@ -47,7 +47,7 @@ function updatePanel() {
 
     // ── Support tool ──────────────────────────────────────────
     if (tool === 'addSupport' && joint) {
-        badge.textContent = `J${joint.id}`;
+        badge.textContent = `J${joint.label}`;
         body.appendChild(buildSupportForm(joint, trussRef));
 
     } else if (tool === 'addSupport' && !joint) {
@@ -56,7 +56,7 @@ function updatePanel() {
 
     // ── Force tool + joint selected → force input form ────────
     } else if (tool === 'addForce' && joint) {
-        badge.textContent = `J${joint.id}`;
+        badge.textContent = `J${joint.label}`;
         body.appendChild(buildForceForm(joint, trussRef));
 
     } else if (tool === 'addForce' && !joint) {
@@ -171,7 +171,7 @@ function buildSupportForm(joint, truss) {
     const form = div('force-form');
 
     // Joint badge
-    form.appendChild(el('span', 'joint-badge', `● Joint ${joint.id}  (${joint.x}, ${joint.y})`));
+    form.appendChild(el('span', 'joint-badge', `● Joint ${joint.label}  (${joint.x}, ${joint.y})`));
 
     // Current status
     const currentWrap = div('');
@@ -196,7 +196,7 @@ function buildSupportForm(joint, truss) {
 
         const radio = document.createElement('input');
         radio.type  = 'radio';
-        radio.name  = `support-j${joint.id}`;
+        radio.name  = `support-j${joint.label}`;
         radio.value = type.id;
         radio.checked = selectedType === type.id;
 
@@ -262,7 +262,7 @@ function buildForceForm(joint, truss) {
     const form = div('force-form');
 
     // Joint badge
-    const badge = el('span', 'joint-badge', `● Joint ${joint.id}  (${joint.x}, ${joint.y})`);
+    const badge = el('span', 'joint-badge', `● Joint ${joint.label}  (${joint.x}, ${joint.y})`);
     form.appendChild(badge);
 
     // Fx input
@@ -321,7 +321,7 @@ function buildForceForm(joint, truss) {
 
 function buildForceList(joint, truss) {
     const section = div('panel-section');
-    section.appendChild(el('span', 'section-label', `Applied at J${joint.id}`));
+    section.appendChild(el('span', 'section-label', `Applied at J${joint.label}`));
 
     const list = div('force-list');
 
@@ -384,7 +384,7 @@ function buildResults(result, truss) {
         const state = m.force >= 0 ? 'T' : 'C';
 
         const tdId    = row.insertCell(); tdId.className = 'member-id';
-        tdId.textContent = `M${m.id}`;
+        tdId.textContent = m.label;
 
         const tdF = row.insertCell();
         tdF.textContent = `${m.force >= 0 ? '+' : ''}${m.force.toFixed(2)}`;
@@ -403,10 +403,10 @@ function buildResults(result, truss) {
         const rlist = div('');
         for (const j of supports) {
             if (Math.abs(j.rx) > 1e-6) {
-                rlist.appendChild(reactionRow(`J${j.id}  Rx`, j.rx));
+                rlist.appendChild(reactionRow(`J${j.label}  Rx`, j.rx));
             }
             if (Math.abs(j.ry) > 1e-6) {
-                rlist.appendChild(reactionRow(`J${j.id}  Ry`, j.ry));
+                rlist.appendChild(reactionRow(`J${j.label}  Ry`, j.ry));
             }
         }
         section.appendChild(rlist);
