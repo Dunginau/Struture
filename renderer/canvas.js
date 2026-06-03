@@ -151,7 +151,7 @@ function drawGrid(ctx, canvas, t) {
     // ── Minor grid ────────────────────────────────────────────
     const minorPx = minorGrid * t.scale;
     if (minorPx >= 4) {          // don't draw when too dense
-        ctx.strokeStyle = '#161929';
+        ctx.strokeStyle = '#4b548567';
         ctx.lineWidth   = 0.5;
 
         const x0 = ((t.offsetX % minorPx) + minorPx) % minorPx;
@@ -172,13 +172,13 @@ function drawGrid(ctx, canvas, t) {
 
     for (let x = x0m; x < w; x += majorPx) {
         const isAxis = Math.abs(x - t.offsetX) < 0.5;
-        ctx.strokeStyle = isAxis ? '#2e3860' : '#1d2235';
+        ctx.strokeStyle = isAxis ? '#1f2933a1' : '#1f29334b';
         ctx.lineWidth   = isAxis ? 1.5 : 1;
         ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
     }
     for (let y = y0m; y < h; y += majorPx) {
         const isAxis = Math.abs(y - t.offsetY) < 0.5;
-        ctx.strokeStyle = isAxis ? '#2e3860' : '#1d2235';
+        ctx.strokeStyle = isAxis ? '#1f2933a7' : '#1f29337c';
         ctx.lineWidth   = isAxis ? 1.5 : 1;
         ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
     }

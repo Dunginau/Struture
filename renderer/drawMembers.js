@@ -8,14 +8,14 @@
 
 import state from '../ui/state.js';
 
-const COLOR_UNSOLVED    = '#8a9abf';
-const COLOR_TENSION     = '#4d7cfe';
-const COLOR_COMPRESSION = '#e05060';
-const LABEL_BG_T        = '#0d1c3d';
-const LABEL_BG_C        = '#200d12';
+const COLOR_UNSOLVED    = '#3f4e70';
+const COLOR_TENSION     = '#3958ab';
+const COLOR_COMPRESSION = '#a03945';
+const LABEL_BG_T        = '#bed3ffc8';
+const LABEL_BG_C        = '#ffb2c7b8';
 const COLOR_ANGLE       = '#c8a96e';
-const COLOR_LENGTH      = '#8a9abf';
-const LABEL_BG_LENGTH   = '#141824';
+const COLOR_LENGTH      = '#151921';
+const LABEL_BG_LENGTH   = '#33374100';
 
 export function drawMembers(ctx, truss, worldToScreen) {
     for (const member of truss.members) {
