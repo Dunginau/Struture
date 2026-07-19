@@ -138,7 +138,7 @@ function resolvePosition(wx, wy) {
         y = Math.round(y / g) * g;
     }
 
-    return { x, y };
+    return { x, y }; 
 }
 
 function nearestJoint(wx, wy) {
