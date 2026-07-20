@@ -9,6 +9,7 @@ import state            from './ui/state.js';
 // ── Bootstrap ────────────────────────────────────────────────
 const canvas = document.getElementById('truss-canvas');
 const truss  = new Truss();
+window._truss = truss;  // needed by canvas.js zoom/pan handler
 
 initCanvas(canvas);
 initToolbar(truss);
