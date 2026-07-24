@@ -3,7 +3,7 @@ import { initCanvas, render } from './renderer/canvas.js';
 import { initMouse }    from './ui/mouse.js';
 import { initToolbar }  from './ui/toolbar.js';
 import { initPanels }   from './ui/panels.js';
-import { solveTruss }   from './core/solver/solveTruss.js';
+import { solveTrussRemote } from './core/client/solverClient.js';
 import state            from './ui/state.js';
 
 // ── Bootstrap ────────────────────────────────────────────────
@@ -19,8 +19,10 @@ initMouse(canvas, truss);
 render(truss);
 
 // ── Solve ─────────────────────────────────────────────────────
-window.onSolve = () => {
-    const result = solveTruss(truss);
+// Solving now happens server-side (backend/core/solver.py). This just
+// sends the truss over the wire and applies whatever comes back.
+window.onSolve = async () => {
+    const result = await solveTrussRemote(truss);
     state.set({ solveResult: result });
     render(truss);
 };
